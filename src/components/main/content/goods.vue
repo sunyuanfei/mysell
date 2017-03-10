@@ -42,27 +42,8 @@
                                     <span>¥价格</span>
                                     <span>降价</span>
                                 </div>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <li class="foods-list food-list-hook">
-                    <h1 class="title">包子稀饭</h1>
-                    <ul>
-                        <li class="food-item border-1px">
-                            <div class="icon">
-                                <img src="">
-                            </div>
-                            <div class="content">
-                                <h2 class="name">炒饭</h2>
-                                <p class="desc">好吃会常来光顾</p>
-                                <div class="extra">
-                                    <span>月售</span>
-                                    <span>好评率</span>
-                                </div>
-                                <div class="price">
-                                    <span>¥价格</span>
-                                    <span>降价</span>
+                                <div class="cartcontrol-wrappper">
+                                    <cartcontrol :food="food"></cartcontrol>
                                 </div>
                             </div>
                         </li>
@@ -86,27 +67,8 @@
                                     <span>¥价格</span>
                                     <span>降价</span>
                                 </div>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <li class="foods-list food-list-hook">
-                    <h1 class="title">包子稀饭</h1>
-                    <ul>
-                        <li class="food-item border-1px">
-                            <div class="icon">
-                                <img src="">
-                            </div>
-                            <div class="content">
-                                <h2 class="name">炒饭</h2>
-                                <p class="desc">好吃会常来光顾</p>
-                                <div class="extra">
-                                    <span>月售</span>
-                                    <span>好评率</span>
-                                </div>
-                                <div class="price">
-                                    <span>¥价格</span>
-                                    <span>降价</span>
+                                <div class="cartcontrol-wrappper">
+                                    <cartcontrol :food="food"></cartcontrol>
                                 </div>
                             </div>
                         </li>
@@ -129,6 +91,34 @@
                                 <div class="price">
                                     <span>¥价格</span>
                                     <span>降价</span>
+                                </div>
+                                <div class="cartcontrol-wrappper">
+                                    <cartcontrol :food="food"></cartcontrol>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="foods-list food-list-hook">
+                    <h1 class="title">包子稀饭</h1>
+                    <ul>
+                        <li class="food-item border-1px">
+                            <div class="icon">
+                                <img src="">
+                            </div>
+                            <div class="content">
+                                <h2 class="name">炒饭</h2>
+                                <p class="desc">好吃会常来光顾</p>
+                                <div class="extra">
+                                    <span>月售</span>
+                                    <span>好评率</span>
+                                </div>
+                                <div class="price">
+                                    <span>¥价格</span>
+                                    <span>降价</span>
+                                </div>
+                                <div class="cartcontrol-wrappper">
+                                    <cartcontrol :food="ff"></cartcontrol>
                                 </div>
                             </div>
                         </li>
@@ -136,17 +126,21 @@
                 </li>
             </ul>
         </div>
-        <shopCart></shopCart>
+        <shopCart :selectFoods="selectFoods"></shopCart>
     </div>
 </template>
 <script>
     import BScroll from 'better-scroll'
     import ShopCart from '../cart/ShopCart.vue'
+    import cartcontrol from '../cartcontroller/cartctroller.vue'
     export default {
         data () {
             return {
                 listHeight: [],
-                scrollY: ''
+                scrollY: '',
+                food: {'title': '包子'},
+                ff: {'title': '包子'},
+                goods: []
             }
         },
         created () {
@@ -156,7 +150,8 @@
             })
         },
         components: {
-            shopCart: ShopCart
+            shopCart: ShopCart,
+            cartcontrol: cartcontrol
         },
         computed: {
             currentIndex () {
@@ -168,6 +163,17 @@
                     }
                 }
                 return 0
+            },
+            selectFoods () {
+                let foods = []
+                this.goods.forEach((good) => {
+                    good.foods.forEach((food) => {
+                        if (food.count) {
+                            foods.push(food)
+                        }
+                    })
+                })
+                return foods
             }
         },
         methods: {
@@ -181,7 +187,8 @@
                     click: true
                 })
                 this.foods_wrapper = new BScroll(this.$refs.foods, {
-                    probeType: 3
+                    probeType: 3,
+                    click: true
                 })
                 this.foods_wrapper.on('scroll', (pos) => {
                     this.scrollY = Math.abs(Math.random(pos.y))
@@ -272,4 +279,8 @@
                font-size 10px
                color #cccccc
                margin-right 4px
+             .cartcontrol-wrappper
+               position absolute
+               right 0
+               bottom 12px
 </style>
